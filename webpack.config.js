@@ -13,7 +13,7 @@ module.exports = {
       loader: 'babel',
       include: /js/,
       query: {
-        presets: ['es2015'],
+        presets: ['env'],
       }
     }]
   }
