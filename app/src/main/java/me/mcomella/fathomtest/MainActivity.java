@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     public class ChromeClient extends WebChromeClient {
         @Override
         public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-            Log.d("lol", consoleMessage.messageLevel() + "> " + consoleMessage.sourceId() + ":" + consoleMessage.lineNumber() + ": " + consoleMessage.message());
+            Log.d("sevtest", consoleMessage.messageLevel() + "> " + consoleMessage.sourceId() + ":" + consoleMessage.lineNumber() + ": " + consoleMessage.message());
             if (consoleMessage.messageLevel() == ConsoleMessage.MessageLevel.ERROR) {
                 Toast.makeText(MainActivity.this, "console: " + consoleMessage.message(), Toast.LENGTH_SHORT).show();
             }
