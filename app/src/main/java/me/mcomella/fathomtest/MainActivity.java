@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         final WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
         webView.addJavascriptInterface(new FathomObject(), "java");
+        webView.addJavascriptInterface(new JsLogger(), "logger");
 
         webView.setWebViewClient(new InjectClient());
         webView.setWebChromeClient(new ChromeClient());
@@ -71,6 +72,18 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     Toast.makeText(MainActivity.this, "Title: " + title, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    public class JsLogger {
+        @JavascriptInterface
+        public void l(final String title) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Log.d("SEVTEST: ", title);
                 }
             });
         }
