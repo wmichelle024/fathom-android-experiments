@@ -1,6 +1,8 @@
 package me.mcomella.fathomtest;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.webkit.ConsoleMessage;
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         webView.setWebChromeClient(new ChromeClient());
 
         webView.loadUrl("http://apple.com");
+        webView.setWebContentsDebuggingEnabled(true);
     }
 
     // Log javascript errors.
@@ -49,19 +52,28 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private final Handler mainHandler = new Handler(Looper.getMainLooper());
+
     public class InjectClient extends WebViewClient {
         @Override
-        public void onPageFinished(WebView view, String url) {
+        public void onPageFinished(final WebView view, String url) {
             super.onPageFinished(view, url);
 
-            final String script = Util.getStringFromResources(view.getContext(), R.raw.extract);
-
-            view.evaluateJavascript(script, new ValueCallback<String>() {
+            mainHandler.postDelayed(new Runnable() {
                 @Override
-                public void onReceiveValue(String s) {
-                    Log.d("lol", "finished: " + s);
+                public void run() {
+                    Log.d("lol", "injecting now.");
+
+                    final String script = Util.getStringFromResources(view.getContext(), R.raw.extract);
+
+                    view.evaluateJavascript(script, new ValueCallback<String>() {
+                        @Override
+                        public void onReceiveValue(String s) {
+                            Log.d("lol", "finished: " + s);
+                        }
+                    });
                 }
-            });
+            }, 10000);
         }
     }
 
